@@ -807,23 +807,36 @@ app.get('/api/challenges', (req: Request, res: Response) => {
   res.json({ challenges: activeChallenges });
 });
 
-// Serve frontend in dev / production
-if (process.env.NODE_ENV !== 'production') {
-  const { createServer: createViteServer } = await import('vite');
-  const vite = await createViteServer({
-    server: { middlewareMode: true },
-    appType: 'spa',
-  });
-  app.use(vite.middlewares);
-} else {
-  app.use(express.static(path.resolve(__dirname, 'dist')));
-  app.get('*', (req: Request, res: Response) => {
-    res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
+// Middleware to normalize URLs if Vercel serverless rewrites strip the /api prefix
+app.use((req: Request, res: Response, next) => {
+  if (req.url && !req.url.startsWith('/api') && !req.url.startsWith('/assets') && !req.url.startsWith('/icon') && !req.url.startsWith('/manifest')) {
+    req.url = '/api' + (req.url.startsWith('/') ? req.url : '/' + req.url);
+  }
+  next();
+});
+
+// Serve frontend in dev / production (disabled on Vercel serverless where Vercel Edge serves static assets)
+if (!process.env.VERCEL) {
+  if (process.env.NODE_ENV !== 'production') {
+    const { createServer: createViteServer } = await import('vite');
+    const vite = await createViteServer({
+      server: { middlewareMode: true },
+      appType: 'spa',
+    });
+    app.use(vite.middlewares);
+  } else {
+    app.use(express.static(path.resolve(__dirname, 'dist')));
+    app.get('*', (req: Request, res: Response) => {
+      res.sendFile(path.resolve(__dirname, 'dist', 'index.html'));
+    });
+  }
+
+  app.listen(PORT, () => {
+    console.log(`FREEDREAM Server running on http://localhost:${PORT}`);
+    console.log(`Brand: FREEDREAM TECHNOLOGIES | "Dream Without Limit"`);
+    console.log(`AI Engine: ${geminiApiKey ? 'Gemini 3.8 Flash Active' : 'Offline Knowledge Engine'}`);
   });
 }
 
-app.listen(PORT, () => {
-  console.log(`FREEDREAM Server running on http://localhost:${PORT}`);
-  console.log(`Brand: FREEDREAM TECHNOLOGIES | "Dream Without Limit"`);
-  console.log(`AI Engine: ${geminiApiKey ? 'Gemini 3.8 Flash Active' : 'Offline Knowledge Engine'}`);
-});
+export default app;
+

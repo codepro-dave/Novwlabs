@@ -27,7 +27,7 @@ export const PublishShareModal: React.FC<PublishShareModalProps> = ({
   onClose,
 }) => {
   const [copied, setCopied] = useState(false);
-  const [activeTab, setActiveTab] = useState<'share' | 'qr' | 'domain' | 'guide'>('share');
+  const [activeTab, setActiveTab] = useState<'share' | 'qr' | 'vercel' | 'domain' | 'guide'>('share');
   const [customDomainInput, setCustomDomainInput] = useState('freedream.com');
   const [savedCustomDomain, setSavedCustomDomain] = useState<string | null>(null);
 
@@ -162,7 +162,19 @@ export const PublishShareModal: React.FC<PublishShareModalProps> = ({
             }`}
           >
             <QrCode className="w-3.5 h-3.5" />
-            <span>Scan QR Code</span>
+            <span>Scan QR</span>
+          </button>
+
+          <button
+            onClick={() => setActiveTab('vercel')}
+            className={`flex-1 py-1.5 rounded-xl transition-all flex items-center justify-center gap-1.5 ${
+              activeTab === 'vercel'
+                ? 'bg-cyan-500 text-black font-semibold shadow-sm'
+                : 'text-slate-400 hover:text-slate-200'
+            }`}
+          >
+            <span className="text-[12px] font-mono">▲</span>
+            <span>Vercel</span>
           </button>
 
           <button
@@ -174,7 +186,7 @@ export const PublishShareModal: React.FC<PublishShareModalProps> = ({
             }`}
           >
             <Globe className="w-3.5 h-3.5" />
-            <span>Custom Domain</span>
+            <span>Domain</span>
           </button>
 
           <button
@@ -186,7 +198,7 @@ export const PublishShareModal: React.FC<PublishShareModalProps> = ({
             }`}
           >
             <Info className="w-3.5 h-3.5" />
-            <span>Publish Guide</span>
+            <span>Guide</span>
           </button>
         </div>
 
@@ -347,6 +359,86 @@ export const PublishShareModal: React.FC<PublishShareModalProps> = ({
 
               <div className="p-3 rounded-xl bg-[#050814] border border-slate-800 text-xs text-slate-400 max-w-sm mx-auto">
                 💡 <strong>Tip for Android users:</strong> After scanning, tap the 3-dot browser menu and select <strong>"Add to Home Screen"</strong> or <strong>"Install App"</strong> to use FREEDREAM like a native APK.
+              </div>
+            </div>
+          )}
+
+          {/* ================= TAB: VERCEL DEPLOYMENT ================= */}
+          {activeTab === 'vercel' && (
+            <div className="space-y-4 animate-in fade-in">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="font-bold text-white text-sm font-display flex items-center gap-2">
+                    <span className="text-base text-cyan-400">▲</span>
+                    <span>Deploy FREEDREAM to Vercel</span>
+                  </h4>
+                  <p className="text-xs text-slate-300 mt-0.5">
+                    Your codebase is fully configured for Vercel with serverless Express backend and Vite frontend.
+                  </p>
+                </div>
+                <span className="px-2.5 py-0.5 rounded-full bg-cyan-950 border border-cyan-500/40 text-cyan-300 text-[10px] font-mono">
+                  Ready to Deploy
+                </span>
+              </div>
+
+              {/* Automated Configuration Spec */}
+              <div className="p-3.5 rounded-2xl bg-[#050814] border border-slate-800 space-y-2 text-xs font-mono">
+                <span className="text-[11px] text-cyan-400 font-semibold block uppercase">
+                  Pre-Configured Files Created in Workspace:
+                </span>
+                <div className="space-y-1 text-slate-300">
+                  <div className="flex items-center justify-between py-1 border-b border-slate-800/80">
+                    <span className="text-white">vercel.json</span>
+                    <span className="text-emerald-400 text-[11px]">Vite preset + /api/* serverless rewrites</span>
+                  </div>
+                  <div className="flex items-center justify-between py-1 border-b border-slate-800/80">
+                    <span className="text-white">api/index.ts</span>
+                    <span className="text-emerald-400 text-[11px]">Express Serverless entry point</span>
+                  </div>
+                  <div className="flex items-center justify-between py-1 border-b border-slate-800/80">
+                    <span className="text-white">.vercelignore</span>
+                    <span className="text-emerald-400 text-[11px]">Clean source packaging</span>
+                  </div>
+                  <div className="flex items-center justify-between py-1">
+                    <span className="text-white">Output Directory</span>
+                    <span className="text-amber-400 text-[11px]">dist (via npm run build)</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Environment Variables Requirement */}
+              <div className="p-3.5 rounded-2xl bg-amber-950/30 border border-amber-500/40 space-y-2 text-xs">
+                <div className="flex items-center gap-2 text-amber-300 font-mono font-semibold text-[11px]">
+                  <span>REQUIRED ENVIRONMENT VARIABLE IN VERCEL:</span>
+                </div>
+                <div className="p-2.5 rounded-xl bg-[#050814] border border-amber-500/30 font-mono text-xs flex items-center justify-between">
+                  <div>
+                    <span className="text-cyan-300 font-bold">GEMINI_API_KEY</span>
+                    <span className="text-slate-400 block text-[10px]">Required for live FREEDREAM AI Assistant & NovaLab synthesis</span>
+                  </div>
+                  <span className="text-amber-400 text-[10px]">Add in Vercel Settings</span>
+                </div>
+              </div>
+
+              {/* 3 Steps to Deploy */}
+              <div className="space-y-2">
+                <span className="text-[11px] font-mono text-slate-400 uppercase font-semibold">
+                  3 Simple Steps to Deploy on Vercel:
+                </span>
+                <div className="space-y-2">
+                  <div className="p-2.5 rounded-xl bg-[#050814] border border-slate-800 flex items-start gap-2.5 text-xs text-slate-300">
+                    <span className="w-5 h-5 rounded-full bg-cyan-950 text-cyan-400 font-mono flex items-center justify-center shrink-0 text-[11px]">1</span>
+                    <span>Push or import this repository into your <strong>GitHub / GitLab</strong> account.</span>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-[#050814] border border-slate-800 flex items-start gap-2.5 text-xs text-slate-300">
+                    <span className="w-5 h-5 rounded-full bg-cyan-950 text-cyan-400 font-mono flex items-center justify-center shrink-0 text-[11px]">2</span>
+                    <span>Go to <a href="https://vercel.com/new" target="_blank" rel="noopener noreferrer" className="text-cyan-400 underline">vercel.com/new</a> and select <strong>Import Project</strong>.</span>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-[#050814] border border-slate-800 flex items-start gap-2.5 text-xs text-slate-300">
+                    <span className="w-5 h-5 rounded-full bg-cyan-950 text-cyan-400 font-mono flex items-center justify-center shrink-0 text-[11px]">3</span>
+                    <span>Paste your <strong>GEMINI_API_KEY</strong> under Environment Variables, click <strong>Deploy</strong>, and your custom <code>.vercel.app</code> domain will be live in 60 seconds!</span>
+                  </div>
+                </div>
               </div>
             </div>
           )}
