@@ -1,0 +1,21 @@
+{
+  "id": "/",
+  "name": "FREEDREAM Technologies",
+  "short_name": "FREEDREAM",
+  "description": "FREEDREAM Technologies - Dream Without Limit. Advanced platform for AI, robotics, scientific discovery, and STEM innovation.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#050814",
+  "theme_color": "#050814",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "categories": ["education", "technology", "productivity"]
+}
