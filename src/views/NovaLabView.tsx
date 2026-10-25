@@ -25,7 +25,8 @@ import {
   RotateCcw,
   Activity,
   AlertTriangle,
-  Lightbulb
+  Lightbulb,
+  Edit3
 } from 'lucide-react';
 
 interface NovaLabViewProps {
@@ -33,6 +34,7 @@ interface NovaLabViewProps {
   savedProjects: InventionProject[];
   onSaveProject: (project: InventionProject) => void;
   onUpdateProject: (project: InventionProject) => void;
+  onDeleteProject?: (projectId: string) => void;
   experimentRecords: ExperimentRecord[];
   onAddExperimentRecord: (record: ExperimentRecord) => void;
 }
@@ -50,6 +52,7 @@ export const NovaLabView: React.FC<NovaLabViewProps> = ({
   savedProjects,
   onSaveProject,
   onUpdateProject,
+  onDeleteProject,
   experimentRecords,
   onAddExperimentRecord,
 }) => {
@@ -112,6 +115,12 @@ sentinel.run_telemetry_loop()`
   const [newProjectProblem, setNewProjectProblem] = useState('');
   const [newProjectSolution, setNewProjectSolution] = useState('');
 
+  // Project Editor State
+  const [editingProject, setEditingProject] = useState<InventionProject | null>(null);
+  const [editMaterialName, setEditMaterialName] = useState('');
+  const [editMaterialUsd, setEditMaterialUsd] = useState('');
+  const [editMaterialNgn, setEditMaterialNgn] = useState('');
+
   // Experiment Recording State
   const [experimentHypothesis, setExperimentHypothesis] = useState('');
   const [experimentMetric, setExperimentMetric] = useState('');
@@ -120,6 +129,42 @@ sentinel.run_telemetry_loop()`
   const [experimentStatus, setExperimentStatus] = useState<'Passed' | 'Failed' | 'Inconclusive'>('Passed');
   const [experimentNotes, setExperimentNotes] = useState('');
   const [selectedProjectIdForExp, setSelectedProjectIdForExp] = useState(savedProjects[0]?.id || 'general');
+
+  // Local fallback generator for offline or network interruption
+  const generateLocalBlueprint = (cat: string, focus: string, level: string) => {
+    const isPython = cat === 'AI & Software' || cat === 'Agritech';
+    const lang = isPython ? 'python' : 'cpp';
+    return {
+      title: `Autonomous ${focus || cat} Sentinel System`,
+      category: cat,
+      abstract: `A modular edge telemetry and actuation platform designed for ${focus.toLowerCase()} applications with real-time sensor processing and fault tolerance.`,
+      problemStatement: `Unmonitored environmental variances in ${focus.toLowerCase()} lead to delayed incident response and unnecessary resource consumption.`,
+      solution: `Combines low-power microcontrollers (ESP32 / RP2040) with dedicated telemetry sensors and automated threshold triggers operating on solar or battery power.`,
+      materials: [
+        { name: 'ESP32 Dual-Core Microcontroller Node', costUsd: 9, costNgn: 13500 },
+        { name: 'Precision Environmental / Optical Sensor Array', costUsd: 18, costNgn: 27000 },
+        { name: 'Low-Power Solid State Relay / Driver Stage', costUsd: 12, costNgn: 18000 },
+        { name: 'Solar Charge Management & 3.7V LiPo Unit', costUsd: 20, costNgn: 30000 },
+        { name: 'Weatherproof Shield Enclosure IP65', costUsd: 14, costNgn: 21000 }
+      ],
+      estimatedTotalUsd: 73,
+      estimatedTotalNgn: 109500,
+      codeLanguage: lang,
+      codeSnippet: isPython
+        ? `# FREEDREAM NOVALAB: Edge ${cat} Engine (${level})\nimport time\n\nclass EdgeSentinel:\n    def __init__(self, threshold=75.0):\n        self.threshold = threshold\n        self.telemetry = []\n\n    def process_sample(self, raw_val):\n        normalized = round(raw_val * 0.1, 2)\n        self.telemetry.append(normalized)\n        status = "ACTUATOR_ENGAGED" if normalized > self.threshold else "NOMINAL"\n        print(f"Sample: {normalized} | Status: {status}")\n        return status\n\nsentinel = EdgeSentinel()\nsentinel.process_sample(820.5)`
+        : `// FREEDREAM NOVALAB: Edge ${cat} Controller (${level})\n#include <Arduino.h>\n\nconst int SENSOR_PIN = 34;\nconst int ACTUATOR_PIN = 23;\nconst float THRESHOLD = 650.0;\n\nvoid setup() {\n  Serial.begin(115200);\n  pinMode(ACTUATOR_PIN, OUTPUT);\n  digitalWrite(ACTUATOR_PIN, LOW);\n  Serial.println("FREEDREAM Node Online: ${focus}");\n}\n\nvoid loop() {\n  int raw = analogRead(SENSOR_PIN);\n  if (raw > THRESHOLD) {\n    digitalWrite(ACTUATOR_PIN, HIGH);\n    Serial.println("Threshold exceeded: Actuating response.");\n  } else {\n    digitalWrite(ACTUATOR_PIN, LOW);\n  }\n  delay(1000);\n}`,
+      circuitSteps: [
+        'Connect the microcontroller 3.3V and GND rails to the breadboard or breakout shield.',
+        'Interface the analog sensor output to GPIO 34 (ADC1 channel).',
+        'Route the digital actuation line to GPIO 23 through an optical isolator or relay driver.',
+        'Connect solar charging telemetry and configure hardware watchdog timer.'
+      ],
+      experimentProtocols: [
+        'Metric 1: Measure baseline current consumption in idle sleep vs actuation mode.',
+        'Metric 2: Verify sensor response latency under simulated step inputs.'
+      ]
+    };
+  };
 
   // Call AI Generator
   const handleGenerateInvention = async () => {
@@ -131,12 +176,18 @@ sentinel.run_telemetry_loop()`
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ category, focus: focusArea, complexity })
       });
-      const data = await res.json();
-      if (data.project) {
-        setGeneratedProject(data.project);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.project) {
+          setGeneratedProject(data.project);
+          return;
+        }
       }
+      // If server responded with error status, synthesize fallback project
+      setGeneratedProject(generateLocalBlueprint(category, focusArea, complexity));
     } catch (err) {
-      console.error(err);
+      console.warn('Network request failed, utilizing local FREEDREAM blueprint synthesizer:', err);
+      setGeneratedProject(generateLocalBlueprint(category, focusArea, complexity));
     } finally {
       setIsGenerating(false);
     }
@@ -1054,8 +1105,8 @@ test_water_source("River Basin Beta")`
                   </div>
                 </div>
 
-                {/* Stage Upgrader Actions */}
-                <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                {/* Stage Upgrader Actions & Management Controls */}
+                <div className="pt-2 border-t border-slate-800/80 flex flex-wrap items-center justify-between gap-2">
                   <div className="flex items-center gap-1">
                     {(['Concept', 'Prototype', 'Testing', 'Deployed'] as const).map(stage => (
                       <button
@@ -1079,9 +1130,25 @@ test_water_source("River Basin Beta")`
                     ))}
                   </div>
 
-                  <span className="text-[10px] font-mono text-slate-500">
-                    Created {proj.createdAt}
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      onClick={() => setEditingProject(JSON.parse(JSON.stringify(proj)))}
+                      className="px-2.5 py-1 rounded-lg bg-cyan-950/80 hover:bg-cyan-900 text-cyan-300 border border-cyan-700/60 text-[11px] font-mono flex items-center gap-1 transition-all"
+                      title="Edit project details, notes, and Bill of Materials"
+                    >
+                      <Edit3 className="w-3 h-3 text-cyan-400" />
+                      <span>Edit & Notes</span>
+                    </button>
+                    {onDeleteProject && (
+                      <button
+                        onClick={() => onDeleteProject(proj.id)}
+                        className="p-1 rounded-lg bg-slate-900 hover:bg-rose-950/60 text-slate-500 hover:text-rose-400 border border-slate-800 hover:border-rose-800/50 transition-colors"
+                        title="Delete project"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}
@@ -1184,6 +1251,228 @@ test_water_source("River Basin Beta")`
                   >
                     Create Project
                   </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Edit Project Plan & Bill of Materials Modal */}
+          {editingProject && (
+            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+              <div className="relative w-full max-w-2xl bg-[#090e29] border border-cyan-500/50 rounded-2xl p-6 space-y-4 glow-card max-h-[90vh] overflow-y-auto">
+                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                  <div>
+                    <h3 className="font-bold text-lg text-white font-display flex items-center gap-2">
+                      <Edit3 className="w-5 h-5 text-cyan-400" />
+                      <span>Edit Invention Project & BOM</span>
+                    </h3>
+                    <p className="text-xs text-slate-400">
+                      Update specifications, engineering notes, and components for <span className="text-cyan-300 font-mono">{editingProject.title}</span>
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setEditingProject(null)}
+                    className="text-slate-400 hover:text-white p-1 rounded-lg"
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                <div className="space-y-4 text-xs">
+                  {/* Title & Stage */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="sm:col-span-2">
+                      <label className="block text-[11px] font-mono text-slate-400 mb-1">PROJECT TITLE</label>
+                      <input
+                        type="text"
+                        value={editingProject.title}
+                        onChange={(e) => setEditingProject({ ...editingProject, title: e.target.value })}
+                        className="w-full bg-[#050814] border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-cyan-400 text-xs"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-mono text-slate-400 mb-1">STAGE</label>
+                      <select
+                        value={editingProject.stage}
+                        onChange={(e: any) => setEditingProject({ ...editingProject, stage: e.target.value })}
+                        className="w-full bg-[#050814] border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-cyan-400 text-xs"
+                      >
+                        <option value="Concept">Concept</option>
+                        <option value="Prototype">Prototype</option>
+                        <option value="Testing">Testing</option>
+                        <option value="Deployed">Deployed</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Progress Slider */}
+                  <div className="p-3 rounded-xl bg-[#050814] border border-slate-800 space-y-2">
+                    <div className="flex justify-between font-mono text-xs">
+                      <span className="text-slate-400">Development Progress:</span>
+                      <span className="text-cyan-400 font-bold">{editingProject.progressPercentage}%</span>
+                    </div>
+                    <input
+                      type="range"
+                      min="0"
+                      max="100"
+                      value={editingProject.progressPercentage}
+                      onChange={(e) => setEditingProject({ ...editingProject, progressPercentage: Number(e.target.value) })}
+                      className="w-full accent-cyan-400 cursor-pointer"
+                    />
+                  </div>
+
+                  {/* Problem & Solution / Engineering Notes */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-[11px] font-mono text-slate-400 mb-1">PROBLEM STATEMENT</label>
+                      <textarea
+                        value={editingProject.problemStatement}
+                        onChange={(e) => setEditingProject({ ...editingProject, problemStatement: e.target.value })}
+                        rows={3}
+                        className="w-full bg-[#050814] border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-cyan-400 resize-none text-xs"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[11px] font-mono text-slate-400 mb-1">TECHNICAL SOLUTION & NOTES</label>
+                      <textarea
+                        value={editingProject.solution}
+                        onChange={(e) => setEditingProject({ ...editingProject, solution: e.target.value })}
+                        rows={3}
+                        className="w-full bg-[#050814] border border-slate-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-cyan-400 resize-none text-xs"
+                      />
+                    </div>
+                  </div>
+
+                  {/* Bill of Materials (BOM) Editor */}
+                  <div className="p-4 rounded-xl bg-[#050814] border border-slate-800 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-mono text-xs font-semibold text-amber-400 uppercase flex items-center gap-1.5">
+                        <DollarSign className="w-3.5 h-3.5" />
+                        <span>Bill of Materials (BOM) & Cost Tracking</span>
+                      </h4>
+                      <span className="text-xs font-mono text-cyan-300">
+                        Total: ${editingProject.estimatedTotalUsd} USD / ₦{editingProject.estimatedTotalNgn.toLocaleString()} NGN
+                      </span>
+                    </div>
+
+                    {/* Materials Table */}
+                    <div className="space-y-1.5 max-h-40 overflow-y-auto">
+                      {editingProject.materials.map((mat, idx) => (
+                        <div key={idx} className="flex items-center justify-between p-2 rounded-lg bg-[#090e29] border border-slate-800 text-xs font-mono">
+                          <span className="text-slate-200 truncate pr-2">{mat.name}</span>
+                          <div className="flex items-center gap-3 shrink-0">
+                            <span className="text-amber-400">${mat.costUsd} (₦{mat.costNgn.toLocaleString()})</span>
+                            <button
+                              onClick={() => {
+                                const newMats = editingProject.materials.filter((_, i) => i !== idx);
+                                const totalUsd = newMats.reduce((sum, m) => sum + m.costUsd, 0);
+                                const totalNgn = newMats.reduce((sum, m) => sum + m.costNgn, 0);
+                                setEditingProject({
+                                  ...editingProject,
+                                  materials: newMats,
+                                  estimatedTotalUsd: totalUsd,
+                                  estimatedTotalNgn: totalNgn
+                                });
+                              }}
+                              className="text-slate-500 hover:text-rose-400 transition-colors"
+                              title="Remove item"
+                            >
+                              <Trash2 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Add Component Subform */}
+                    <div className="pt-2 border-t border-slate-800/80 flex flex-wrap sm:flex-nowrap gap-2 items-center">
+                      <input
+                        type="text"
+                        value={editMaterialName}
+                        onChange={(e) => setEditMaterialName(e.target.value)}
+                        placeholder="Add component name (e.g. LiPo Battery)"
+                        className="flex-1 bg-[#090e29] border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400"
+                      />
+                      <input
+                        type="number"
+                        value={editMaterialUsd}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setEditMaterialUsd(val);
+                          setEditMaterialNgn(val ? String(Math.round(Number(val) * 1500)) : '');
+                        }}
+                        placeholder="USD $"
+                        className="w-20 bg-[#090e29] border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400"
+                      />
+                      <input
+                        type="number"
+                        value={editMaterialNgn}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setEditMaterialNgn(val);
+                          setEditMaterialUsd(val ? String(Math.round(Number(val) / 1500)) : '');
+                        }}
+                        placeholder="NGN ₦"
+                        className="w-24 bg-[#090e29] border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-white focus:outline-none focus:border-cyan-400"
+                      />
+                      <button
+                        onClick={() => {
+                          if (!editMaterialName || !editMaterialUsd) return;
+                          const usd = Number(editMaterialUsd) || 0;
+                          const ngn = Number(editMaterialNgn) || usd * 1500;
+                          const newMats = [...editingProject.materials, { name: editMaterialName, costUsd: usd, costNgn: ngn }];
+                          const totalUsd = newMats.reduce((sum, m) => sum + m.costUsd, 0);
+                          const totalNgn = newMats.reduce((sum, m) => sum + m.costNgn, 0);
+                          setEditingProject({
+                            ...editingProject,
+                            materials: newMats,
+                            estimatedTotalUsd: totalUsd,
+                            estimatedTotalNgn: totalNgn
+                          });
+                          setEditMaterialName('');
+                          setEditMaterialUsd('');
+                          setEditMaterialNgn('');
+                        }}
+                        className="px-3 py-1.5 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-black font-semibold text-xs font-mono shrink-0 flex items-center gap-1"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>Add</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Modal Footer Actions */}
+                <div className="pt-3 border-t border-slate-800 flex items-center justify-between">
+                  {onDeleteProject && (
+                    <button
+                      onClick={() => {
+                        onDeleteProject(editingProject.id);
+                        setEditingProject(null);
+                      }}
+                      className="px-3 py-2 rounded-xl bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-800/40 text-xs font-mono flex items-center gap-1.5 transition-colors"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Delete Project</span>
+                    </button>
+                  )}
+                  <div className="flex items-center gap-2 ml-auto">
+                    <button
+                      onClick={() => setEditingProject(null)}
+                      className="px-4 py-2 rounded-xl bg-slate-900 text-slate-400 text-xs font-mono hover:text-white"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={() => {
+                        onUpdateProject(editingProject);
+                        setEditingProject(null);
+                      }}
+                      className="px-5 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 text-black font-semibold text-xs font-mono shadow-md shadow-cyan-500/20"
+                    >
+                      Save Changes
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>

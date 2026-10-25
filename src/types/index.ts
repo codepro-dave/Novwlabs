@@ -5,7 +5,8 @@ export type NavigationTab =
   | 'academy' 
   | 'hub' 
   | 'news' 
-  | 'profile';
+  | 'profile'
+  | 'owner';
 
 export type Currency = 'USD' | 'NGN';
 
@@ -64,8 +65,15 @@ export interface NewsArticle {
   readTime: string;
   imageUrl: string;
   summary: string;
+  fullText?: string;
   url: string;
   featured?: boolean;
+  isPublished?: boolean;
+  status?: 'draft' | 'published';
+  scheduledAt?: string;
+  authorEmail?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface TechChallenge {
@@ -85,6 +93,11 @@ export interface AcademyLesson {
   title: string;
   duration: string;
   completed?: boolean;
+  content?: string;
+  codeSnippet?: string;
+  codeLanguage?: string;
+  takeaways?: string[];
+  challenge?: string;
 }
 
 export interface AcademyQuiz {
@@ -142,3 +155,84 @@ export interface UserProfile {
   accentGlow: 'cyan' | 'gold';
   phoneFrameMode: boolean;
 }
+
+export type AdminRole = 'owner' | 'admin' | 'moderator' | 'user';
+
+export interface OwnerUser {
+  id: string;
+  name: string;
+  email: string;
+  handle: string;
+  role: AdminRole;
+  avatar: string;
+  location: string;
+  status: 'active' | 'suspended';
+  createdAt: string;
+  lastLoginAt?: string;
+}
+
+export interface FeatureSettings {
+  maintenanceMode: boolean;
+  maintenanceMessage: string;
+  welcomeHeadline: string;
+  welcomeSubmessage: string;
+  aiAssistantEnabled: boolean;
+  novaLabEnabled: boolean;
+  communityHubSubmissions: boolean;
+  academyQuizzes: boolean;
+  featuredNewsBanner: boolean;
+  spaceUpdatesSection: boolean;
+  africanTechSpotlight: boolean;
+  lastUpdatedBy: string;
+  lastUpdatedAt: string;
+}
+
+export interface AnnouncementItem {
+  id: string;
+  title: string;
+  message: string;
+  category: 'Urgent' | 'Update' | 'Maintenance' | 'Feature' | 'Milestone';
+  active: boolean;
+  createdAt: string;
+  authorEmail: string;
+}
+
+export interface AuditLogEntry {
+  id: string;
+  timestamp: string;
+  action: string;
+  actorEmail: string;
+  actorRole: string;
+  target?: string;
+  details: string;
+  ipAddress?: string;
+}
+
+export interface FeedbackReport {
+  id: string;
+  userId: string;
+  userName: string;
+  category: string;
+  message: string;
+  createdAt: string;
+  status: 'open' | 'resolved';
+}
+
+export interface OwnerDashboardStats {
+  totalUsers: number;
+  activeUsers: number;
+  publishedNews: number;
+  totalNewsArticles: number;
+  activeProjects: number;
+  announcementsCount: number;
+  maintenanceMode: boolean;
+  systemHealth: {
+    serverStatus: string;
+    uptime: string;
+    telemetryLatencyMs: number;
+    databaseStatus: string;
+    neuralEngineStatus: string;
+  };
+  recentLogs: AuditLogEntry[];
+}
+

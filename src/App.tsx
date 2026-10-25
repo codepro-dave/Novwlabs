@@ -12,7 +12,8 @@ import {
   NewsArticle, 
   TechChallenge, 
   AcademyCourse, 
-  ExperimentRecord 
+  ExperimentRecord,
+  FeatureSettings
 } from './types';
 import { WelcomeScreen } from './components/WelcomeScreen';
 import { Navbar } from './components/Navbar';
@@ -29,6 +30,7 @@ import { AcademyView } from './views/AcademyView';
 import { InnovationHubView } from './views/InnovationHubView';
 import { NewsView } from './views/NewsView';
 import { ProfileView } from './views/ProfileView';
+import { OwnerControlCenterView } from './views/OwnerControlCenterView';
 
 export default function App() {
   const [showWelcome, setShowWelcome] = useState<boolean>(() => {
@@ -47,19 +49,19 @@ export default function App() {
       try { return JSON.parse(saved); } catch (e) { /* ignore */ }
     }
     return {
-      name: 'Adewale Adeleke',
-      handle: '@adewale.innovates',
-      role: 'Robotics & Hardware Architect',
+      name: 'FREEDREAM Innovator',
+      handle: '@innovator',
+      role: 'Hardware & AI Explorer',
       location: 'Lagos, Nigeria',
-      avatar: '👨🏾‍🔬',
-      bio: 'Building solar autonomous rovers and edge-AI agriculture telemetry. Dedicated to the vision of African deep-tech sovereignty.',
-      xp: 850,
-      level: 4,
-      streakDays: 7,
-      completedCourses: ['prog-1'],
-      savedArticles: ['news-1', 'news-2'],
-      savedProjectIds: ['proj-1', 'proj-2'],
-      bookmarkedIdeas: ['Acoustic Ultrasonic Anti-Poaching & Wildlife Boundary Sensor'],
+      avatar: '🚀',
+      bio: 'Exploring deep-tech breakthroughs, designing prototypes in NovaLab, and collaborating on the future of technology.',
+      xp: 150,
+      level: 1,
+      streakDays: 1,
+      completedCourses: [],
+      savedArticles: [],
+      savedProjectIds: [],
+      bookmarkedIdeas: [],
       currency: 'NGN',
       accentGlow: 'cyan',
       phoneFrameMode: false,
@@ -72,46 +74,7 @@ export default function App() {
     if (saved) {
       try { return JSON.parse(saved); } catch (e) { /* ignore */ }
     }
-    return [
-      {
-        id: 'proj-1',
-        title: 'Solar-Powered Autonomous Crop Health Sentinel',
-        category: 'Agritech',
-        abstract: 'Edge-AI microcontroller telemetry detecting early cassava mosaic disease using multispectral NIR optical indices.',
-        problemStatement: 'Late pest detection in rural farms results in catastrophic seasonal harvest collapse.',
-        solution: 'Automated solar sensor node with GSM alert transmission and soil moisture irrigation trigger.',
-        materials: [
-          { name: 'ESP32-S3 Microcontroller Unit', costUsd: 9, costNgn: 13500 },
-          { name: 'Multispectral Optical Sensor Array', costUsd: 28, costNgn: 42000 },
-          { name: '10W Monocrystalline Solar Panel & BMS', costUsd: 22, costNgn: 33000 },
-          { name: 'Submersible 12V DC Irrigation Valve', costUsd: 14, costNgn: 21000 }
-        ],
-        estimatedTotalUsd: 73,
-        estimatedTotalNgn: 109500,
-        stage: 'Prototype',
-        progressPercentage: 65,
-        createdAt: '2026-09-12'
-      },
-      {
-        id: 'proj-2',
-        title: 'Low-Cost EMG Myoelectric Bionic Hand',
-        category: 'Healthcare',
-        abstract: '3D-printed modular prosthetic hand with surface muscle sensors for adaptive tactile grasping.',
-        problemStatement: 'Prosthetics cost tens of thousands of dollars, leaving rural amputees without rehabilitation.',
-        solution: '3D-printed PLA/PETG tendon joints actuated by 5 metal-gear servos controlled via Arduino Nano.',
-        materials: [
-          { name: 'PETG Filament Spool 1kg', costUsd: 20, costNgn: 30000 },
-          { name: 'MG996R Metal Gear Servos (5x)', costUsd: 30, costNgn: 45000 },
-          { name: 'MyoWare 2.0 Muscle EMG Sensor', costUsd: 38, costNgn: 57000 },
-          { name: 'Arduino Nano V3 & Breakout', costUsd: 10, costNgn: 15000 }
-        ],
-        estimatedTotalUsd: 98,
-        estimatedTotalNgn: 147000,
-        stage: 'Testing',
-        progressPercentage: 80,
-        createdAt: '2026-10-01'
-      }
-    ];
+    return [];
   });
 
   // Experiment records
@@ -120,40 +83,15 @@ export default function App() {
     if (saved) {
       try { return JSON.parse(saved); } catch (e) { /* ignore */ }
     }
-    return [
-      {
-        id: 'exp-1',
-        projectId: 'proj-1',
-        projectTitle: 'Solar-Powered Autonomous Crop Health Sentinel',
-        trialNumber: 1,
-        hypothesis: 'Solar charging rate exceeds battery depletion under 6 hours of tropical sunlight',
-        metricObserved: 'Battery Voltage at 18:00 hrs',
-        expectedValue: '> 4.10V',
-        actualValue: '4.18V',
-        status: 'Passed',
-        observations: 'Solar panel with MPPT reached full charge 45 minutes ahead of prediction.',
-        date: '2026-10-18'
-      },
-      {
-        id: 'exp-2',
-        projectId: 'proj-2',
-        projectTitle: 'Low-Cost EMG Myoelectric Bionic Hand',
-        trialNumber: 2,
-        hypothesis: 'EMG signal threshold detection latency is less than 60 milliseconds',
-        metricObserved: 'EMG Trigger to Servo Rotation Delta',
-        expectedValue: '< 60ms',
-        actualValue: '48ms',
-        status: 'Passed',
-        observations: 'Noise filter capacitor on analog pin reduced false positive trigger rate by 92%.',
-        date: '2026-10-22'
-      }
-    ];
+    return [];
   });
 
   // Community Hub Projects
   const [communityProjects, setCommunityProjects] = useState<CommunityProject[]>([]);
   // News Articles
   const [newsArticles, setNewsArticles] = useState<NewsArticle[]>([]);
+  // Feature Matrix Settings
+  const [featureSettings, setFeatureSettings] = useState<FeatureSettings | null>(null);
   // Tech Challenges
   const [challenges, setChallenges] = useState<TechChallenge[]>([]);
   // Academy Courses
@@ -163,10 +101,10 @@ export default function App() {
   const [notifications, setNotifications] = useState<AppNotification[]>([
     {
       id: 'notif-1',
-      title: 'New Technology Challenge Launched',
-      message: 'The Clean Water Autonomous IoT Network Challenge 2026 is now open with a $10,000 / ₦15,000,000 prize pool.',
-      time: '10m ago',
-      category: 'Challenge',
+      title: 'Innovation Hub Ready',
+      message: 'Welcome to the FREEDREAM Innovation Hub. Share your invention and explore open blueprints.',
+      time: 'Just now',
+      category: 'System',
       read: false,
       targetTab: 'hub'
     },
@@ -181,8 +119,8 @@ export default function App() {
     },
     {
       id: 'notif-3',
-      title: 'FREEDREAM Neural 2.5 Active',
-      message: 'Full-stack Gemini 3.8 Flash Engine connected for real-time invention blueprint synthesis.',
+      title: 'FREEDREAM Neural Matrix Online',
+      message: 'Full-stack AI Engine ready for real-time invention blueprint synthesis and hardware guidance.',
       time: '1d ago',
       category: 'AI',
       read: true,
@@ -203,15 +141,42 @@ export default function App() {
     localStorage.setItem('freedream_experiments', JSON.stringify(experimentRecords));
   }, [experimentRecords]);
 
+  // Public News Sync Helper
+  const fetchPublicNews = async () => {
+    try {
+      const res = await fetch('/api/news');
+      if (res.ok) {
+        const data = await res.json();
+        setNewsArticles(data.articles || []);
+      }
+    } catch (e) {
+      console.error('Failed to sync public news:', e);
+    }
+  };
+
+  // Feature Settings Sync Helper
+  const fetchFeatureSettings = async () => {
+    try {
+      const res = await fetch('/api/features');
+      if (res.ok) {
+        const data = await res.json();
+        setFeatureSettings(data.features || null);
+      }
+    } catch (e) {
+      console.error('Failed to sync feature settings:', e);
+    }
+  };
+
   // Initial Data Fetching from Express backend
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [newsRes, hubRes, chalRes, acadRes] = await Promise.all([
+        const [newsRes, hubRes, chalRes, acadRes, featRes] = await Promise.all([
           fetch('/api/news'),
           fetch('/api/hub/projects'),
           fetch('/api/challenges'),
-          fetch('/api/academy/courses')
+          fetch('/api/academy/courses'),
+          fetch('/api/features')
         ]);
 
         if (newsRes.ok) {
@@ -229,6 +194,10 @@ export default function App() {
         if (acadRes.ok) {
           const data = await acadRes.json();
           setAcademyCourses(data.courses || []);
+        }
+        if (featRes.ok) {
+          const data = await featRes.json();
+          setFeatureSettings(data.features || null);
         }
       } catch (err) {
         console.error('Failed to fetch initial platform data:', err);
@@ -410,7 +379,30 @@ export default function App() {
       />
 
       {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 pt-5 pb-20 lg:pb-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 pt-5 pb-28 lg:pb-8">
+        {/* Maintenance Mode Banner for active users when enabled by Owner */}
+        {featureSettings?.maintenanceMode && currentTab !== 'owner' && (
+          <div className="mb-6 p-4 sm:p-5 rounded-3xl bg-gradient-to-r from-rose-950/90 via-[#0c1538] to-[#050814] border-2 border-rose-500/70 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 animate-in fade-in">
+            <div className="space-y-1">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-rose-500 animate-ping" />
+                <span className="text-xs font-mono text-rose-300 font-extrabold uppercase tracking-wider">
+                  FREEDREAM SYSTEM MAINTENANCE IN PROGRESS
+                </span>
+              </div>
+              <p className="text-xs sm:text-sm text-slate-200">
+                {featureSettings.maintenanceMessage || 'Platform telemetry upgrade in progress. Regular services will resume shortly.'}
+              </p>
+            </div>
+            <button
+              onClick={() => setCurrentTab('owner')}
+              className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold font-mono text-xs flex items-center gap-1.5 shrink-0 shadow-md transition-all cursor-pointer"
+            >
+              <span>👑 Owner Suite Bypass</span>
+            </button>
+          </div>
+        )}
+
         {currentTab === 'dashboard' && (
           <DashboardView
             userProfile={userProfile}
@@ -427,6 +419,7 @@ export default function App() {
             savedProjects={savedProjects}
             onSaveProject={handleSaveProject}
             onUpdateProject={handleUpdateProject}
+            onDeleteProject={handleRemoveProject}
             experimentRecords={experimentRecords}
             onAddExperimentRecord={handleAddExperiment}
           />
@@ -475,6 +468,15 @@ export default function App() {
             onRemoveBookmark={handleBookmarkArticle}
             onRemoveIdea={handleRemoveIdea}
             onOpenPublishModal={() => setIsPublishModalOpen(true)}
+            onNavigateToOwner={() => setCurrentTab('owner')}
+          />
+        )}
+
+        {currentTab === 'owner' && (
+          <OwnerControlCenterView
+            onBackToApp={() => setCurrentTab('dashboard')}
+            onNavigateTab={setCurrentTab}
+            onRefreshPublicNews={fetchPublicNews}
           />
         )}
       </main>

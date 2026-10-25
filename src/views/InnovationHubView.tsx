@@ -109,10 +109,10 @@ export const InnovationHubView: React.FC<InnovationHubViewProps> = ({
           <div className="flex items-center gap-3 shrink-0">
             <button
               onClick={() => setShowSubmitModal(true)}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-semibold text-xs font-mono flex items-center gap-2 shadow-lg shadow-amber-500/20 transition-all"
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-semibold text-xs font-mono flex items-center gap-2 shadow-lg shadow-amber-500/20 transition-all cursor-pointer"
             >
               <Plus className="w-4 h-4 text-black" />
-              <span>Submit Invention Idea</span>
+              <span>Submit an Idea</span>
             </button>
           </div>
         </div>
@@ -121,7 +121,7 @@ export const InnovationHubView: React.FC<InnovationHubViewProps> = ({
         <div className="mt-6 flex items-center gap-2 border-t border-slate-800/80 pt-4">
           <button
             onClick={() => setActiveTab('projects')}
-            className={`px-4 py-2 rounded-xl text-xs font-mono transition-all flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-xl text-xs font-mono transition-all flex items-center gap-2 cursor-pointer ${
               activeTab === 'projects'
                 ? 'bg-cyan-500 text-black font-semibold shadow-md'
                 : 'text-slate-400 hover:text-white bg-slate-900/60'
@@ -133,7 +133,7 @@ export const InnovationHubView: React.FC<InnovationHubViewProps> = ({
 
           <button
             onClick={() => setActiveTab('challenges')}
-            className={`px-4 py-2 rounded-xl text-xs font-mono transition-all flex items-center gap-2 ${
+            className={`px-4 py-2 rounded-xl text-xs font-mono transition-all flex items-center gap-2 cursor-pointer ${
               activeTab === 'challenges'
                 ? 'bg-amber-500 text-black font-semibold shadow-md'
                 : 'text-slate-400 hover:text-white bg-slate-900/60'
@@ -155,7 +155,7 @@ export const InnovationHubView: React.FC<InnovationHubViewProps> = ({
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-3 py-1 rounded-lg font-mono transition-all shrink-0 ${
+                className={`px-3 py-1 rounded-lg font-mono transition-all shrink-0 cursor-pointer ${
                   selectedCategory === cat
                     ? 'bg-cyan-500 text-black font-semibold'
                     : 'bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-slate-800'
@@ -166,146 +166,190 @@ export const InnovationHubView: React.FC<InnovationHubViewProps> = ({
             ))}
           </div>
 
-          {/* Inventions Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {filteredProjects.map(proj => {
-              const hasVoted = proj.votedUserIds?.includes('current_user') || false;
-              return (
-                <div
-                  key={proj.id}
-                  className="p-5 rounded-2xl bg-[#090e29]/80 border border-slate-800 hover:border-cyan-500/40 flex flex-col justify-between space-y-4 glow-card transition-all"
-                >
-                  <div className="space-y-3">
-                    {/* Header info */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-xl">{proj.authorAvatar}</span>
-                        <div>
-                          <div className="text-xs font-semibold text-white">{proj.author}</div>
-                          <div className="flex items-center gap-1 text-[10px] font-mono text-slate-400">
-                            <MapPin className="w-3 h-3 text-cyan-400" />
-                            <span>{proj.location}</span>
+          {filteredProjects.length === 0 ? (
+            <div className="rounded-3xl border border-cyan-500/20 bg-gradient-to-b from-[#090e29]/90 to-[#050814]/90 p-8 sm:p-14 text-center flex flex-col items-center justify-center space-y-4 glow-card">
+              <div className="w-16 h-16 rounded-2xl bg-cyan-950/80 border border-cyan-500/30 flex items-center justify-center text-cyan-400 shadow-lg shadow-cyan-500/10">
+                <Rocket className="w-8 h-8" />
+              </div>
+              <div className="max-w-md space-y-2">
+                <h3 className="text-xl sm:text-2xl font-bold font-display text-white">
+                  Welcome to the FREEDREAM Innovation Hub.
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  Be among the first to share your invention, explore ideas, and help build the future of technology.
+                </p>
+              </div>
+              <button
+                onClick={() => setShowSubmitModal(true)}
+                className="mt-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-semibold text-xs font-mono flex items-center gap-2 shadow-lg shadow-amber-500/20 transition-all cursor-pointer"
+              >
+                <Plus className="w-4 h-4 text-black" />
+                <span>Submit an Idea</span>
+              </button>
+            </div>
+          ) : (
+            /* Inventions Grid */
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {filteredProjects.map(proj => {
+                const hasVoted = proj.votedUserIds?.includes('current_user') || false;
+                return (
+                  <div
+                    key={proj.id}
+                    className="p-5 rounded-2xl bg-[#090e29]/80 border border-slate-800 hover:border-cyan-500/40 flex flex-col justify-between space-y-4 glow-card transition-all"
+                  >
+                    <div className="space-y-3">
+                      {/* Header info */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xl">{proj.authorAvatar}</span>
+                          <div>
+                            <div className="text-xs font-semibold text-white">{proj.author}</div>
+                            <div className="flex items-center gap-1 text-[10px] font-mono text-slate-400">
+                              <MapPin className="w-3 h-3 text-cyan-400" />
+                              <span>{proj.location}</span>
+                            </div>
                           </div>
+                        </div>
+
+                        <div className="flex items-center gap-1.5">
+                          <span className="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 text-[10px] font-mono border border-cyan-800">
+                            {proj.category}
+                          </span>
+                          <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[10px] font-mono border border-amber-500/30">
+                            {proj.stage}
+                          </span>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-1.5">
-                        <span className="px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 text-[10px] font-mono border border-cyan-800">
-                          {proj.category}
-                        </span>
-                        <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 text-[10px] font-mono border border-amber-500/30">
-                          {proj.stage}
-                        </span>
+                      <div>
+                        <h3 className="text-base font-bold text-white font-display">
+                          {proj.title}
+                        </h3>
+                        <p className="text-xs text-slate-300 mt-1.5 line-clamp-2 leading-relaxed">
+                          {proj.summary}
+                        </p>
+                      </div>
+
+                      {/* Problem highlight pill */}
+                      <div className="p-2.5 rounded-xl bg-[#050814] border border-slate-800/80 text-xs text-slate-400">
+                        <strong className="text-amber-400 block text-[10px] font-mono">TARGET CHALLENGE:</strong>
+                        <span className="line-clamp-2">{proj.problem}</span>
                       </div>
                     </div>
 
-                    <div>
-                      <h3 className="text-base font-bold text-white font-display">
-                        {proj.title}
-                      </h3>
-                      <p className="text-xs text-slate-300 mt-1.5 line-clamp-2 leading-relaxed">
-                        {proj.summary}
-                      </p>
-                    </div>
-
-                    {/* Problem highlight pill */}
-                    <div className="p-2.5 rounded-xl bg-[#050814] border border-slate-800/80 text-xs text-slate-400">
-                      <strong className="text-amber-400 block text-[10px] font-mono">TARGET CHALLENGE:</strong>
-                      <span className="line-clamp-2">{proj.problem}</span>
-                    </div>
-                  </div>
-
-                  {/* Actions & Live Vote Counter */}
-                  <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between">
-                    <button
-                      onClick={() => onVoteProject(proj.id)}
-                      className={`px-3 py-1.5 rounded-xl text-xs font-mono flex items-center gap-1.5 transition-all ${
-                        hasVoted
-                          ? 'bg-amber-500 text-black font-semibold shadow-md'
-                          : 'bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800'
-                      }`}
-                    >
-                      <ThumbsUp className={`w-3.5 h-3.5 ${hasVoted ? 'fill-black' : ''}`} />
-                      <span>{proj.votes} Upvotes</span>
-                    </button>
-
-                    <div className="flex items-center gap-2">
+                    {/* Actions & Live Vote Counter */}
+                    <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between">
                       <button
-                        onClick={() => setSelectedProject(proj)}
-                        className="px-3 py-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-mono transition-colors flex items-center gap-1"
+                        onClick={() => onVoteProject(proj.id)}
+                        className={`px-3 py-1.5 rounded-xl text-xs font-mono flex items-center gap-1.5 transition-all cursor-pointer ${
+                          hasVoted
+                            ? 'bg-amber-500 text-black font-semibold shadow-md'
+                            : 'bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800'
+                        }`}
                       >
-                        <span>Inspect Blueprint</span>
-                        <ChevronRight className="w-3.5 h-3.5" />
+                        <ThumbsUp className={`w-3.5 h-3.5 ${hasVoted ? 'fill-black' : ''}`} />
+                        <span>{proj.votes} Upvotes</span>
                       </button>
+
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setSelectedProject(proj)}
+                          className="px-3 py-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-mono transition-colors flex items-center gap-1 cursor-pointer"
+                        >
+                          <span>Inspect Blueprint</span>
+                          <ChevronRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          )}
         </div>
       )}
 
       {/* ================= TAB 2: TECH CHALLENGES ================= */}
       {activeTab === 'challenges' && (
         <div className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {challenges.map(chal => (
-              <div
-                key={chal.id}
-                className="p-5 rounded-2xl bg-[#090e29]/80 border border-amber-500/30 hover:border-amber-500/60 flex flex-col justify-between space-y-4 glow-card transition-all"
+          {challenges.length === 0 ? (
+            <div className="rounded-3xl border border-slate-800 bg-gradient-to-b from-[#090e29]/70 to-[#050814]/70 p-8 sm:p-14 text-center flex flex-col items-center justify-center space-y-3">
+              <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                <Award className="w-7 h-7" />
+              </div>
+              <h3 className="text-lg font-bold font-display text-white">
+                No Active Sponsored Challenges
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-400 max-w-md leading-relaxed">
+                Official innovation competitions, hackathons, and sponsored challenge programs will be listed here once independently verified and confirmed.
+              </p>
+              <button
+                onClick={() => setShowSubmitModal(true)}
+                className="mt-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-semibold text-xs font-mono transition-all flex items-center gap-2 cursor-pointer shadow-md"
               >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between text-[11px] font-mono">
-                    <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">
-                      {chal.badge}
-                    </span>
-                    <span className="text-slate-400">Deadline: {chal.deadline}</span>
-                  </div>
+                <Plus className="w-4 h-4 text-black" />
+                <span>Submit an Idea</span>
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {challenges.map(chal => (
+                <div
+                  key={chal.id}
+                  className="p-5 rounded-2xl bg-[#090e29]/80 border border-amber-500/30 hover:border-amber-500/60 flex flex-col justify-between space-y-4 glow-card transition-all"
+                >
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between text-[11px] font-mono">
+                      <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                        {chal.badge}
+                      </span>
+                      <span className="text-slate-400">Deadline: {chal.deadline}</span>
+                    </div>
 
-                  <div>
-                    <h3 className="text-base font-bold text-white font-display">
-                      {chal.title}
-                    </h3>
-                    <p className="text-xs text-slate-400 mt-1 font-mono">
-                      Sponsor: <span className="text-cyan-300">{chal.sponsor}</span>
+                    <div>
+                      <h3 className="text-base font-bold text-white font-display">
+                        {chal.title}
+                      </h3>
+                      <p className="text-xs text-slate-400 mt-1 font-mono">
+                        Sponsor: <span className="text-cyan-300">{chal.sponsor}</span>
+                      </p>
+                    </div>
+
+                    <p className="text-xs text-slate-300 leading-relaxed">
+                      {chal.description}
                     </p>
-                  </div>
 
-                  <p className="text-xs text-slate-300 leading-relaxed">
-                    {chal.description}
-                  </p>
+                    <div className="p-3 rounded-xl bg-[#050814] border border-slate-800 space-y-1">
+                      <span className="text-[10px] font-mono text-slate-400 uppercase">INNOVATION PRIZE POOL</span>
+                      <div className="text-base font-bold text-amber-400 font-mono">
+                        {chal.prizePool}
+                      </div>
+                    </div>
 
-                  <div className="p-3 rounded-xl bg-[#050814] border border-slate-800 space-y-1">
-                    <span className="text-[10px] font-mono text-slate-400 uppercase">INNOVATION PRIZE POOL</span>
-                    <div className="text-base font-bold text-amber-400 font-mono">
-                      {chal.prizePool}
+                    <div className="flex flex-wrap gap-1">
+                      {chal.focusAreas.map((area, idx) => (
+                        <span key={idx} className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-cyan-300">
+                          {area}
+                        </span>
+                      ))}
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap gap-1">
-                    {chal.focusAreas.map((area, idx) => (
-                      <span key={idx} className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[10px] font-mono text-cyan-300">
-                        {area}
-                      </span>
-                    ))}
+                  <div className="pt-2 border-t border-slate-800">
+                    <button
+                      onClick={() => {
+                        setShowSubmitModal(true);
+                      }}
+                      className="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-semibold text-xs font-mono shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                      <Plus className="w-4 h-4 text-black" />
+                      <span>Submit an Idea</span>
+                    </button>
                   </div>
                 </div>
-
-                <div className="pt-2 border-t border-slate-800">
-                  <button
-                    onClick={() => {
-                      alert(`You have enrolled your profile for "${chal.title}". Prepare your telemetry documentation for submission!`);
-                    }}
-                    className="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-semibold text-xs font-mono shadow-md transition-all flex items-center justify-center gap-1.5"
-                  >
-                    <Award className="w-4 h-4 text-black" />
-                    <span>Participate in Challenge</span>
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
 

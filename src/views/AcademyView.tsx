@@ -20,7 +20,10 @@ import {
   X,
   Code,
   Layers,
-  GraduationCap
+  GraduationCap,
+  Copy,
+  Terminal,
+  CheckSquare
 } from 'lucide-react';
 
 interface AcademyViewProps {
@@ -37,6 +40,8 @@ export const AcademyView: React.FC<AcademyViewProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [activeCourse, setActiveCourse] = useState<AcademyCourse | null>(null);
   const [activeLessonIndex, setActiveLessonIndex] = useState<number>(0);
+  const [copiedSnippet, setCopiedSnippet] = useState<boolean>(false);
+  const [completedChallenges, setCompletedChallenges] = useState<string[]>([]);
   
   // Interactive Quiz State
   const [showQuiz, setShowQuiz] = useState<boolean>(false);
@@ -308,29 +313,108 @@ export const AcademyView: React.FC<AcademyViewProps> = ({
                     </h2>
                   </div>
 
-                  {/* Interactive Lesson Text & Schematics */}
-                  <div className="space-y-4 text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
-                    <p>
-                      In this module, we dissect the foundational principles of <strong>{activeCourse.lessons[activeLessonIndex].title}</strong>. 
-                      Engineering robust systems requires matching computational capability with physical constraints.
-                    </p>
+                  {/* Interactive Lesson Text, Code & Practical Hardware Schematics */}
+                  {(() => {
+                    const currentLesson = activeCourse.lessons[activeLessonIndex];
+                    const isChallengeCompleted = completedChallenges.includes(currentLesson.id);
 
-                    <div className="p-4 rounded-xl bg-[#050814] border border-slate-800 space-y-2">
-                      <h4 className="text-xs font-mono uppercase text-amber-400 font-semibold flex items-center gap-1.5">
-                        <Sparkles className="w-3.5 h-3.5" />
-                        Core Engineering Takeaways
-                      </h4>
-                      <ul className="list-disc list-inside space-y-1 text-slate-300 text-xs pl-2">
-                        <li>Always calculate maximum current draw before connecting inductive loads.</li>
-                        <li>Implement hardware pull-up or pull-down resistors to prevent floating GPIO pin states.</li>
-                        <li>Structure sensor telemetry into compact packets to minimize edge radio transmission energy.</li>
-                      </ul>
-                    </div>
+                    return (
+                      <div className="space-y-4 text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
+                        {/* In-depth Module Content */}
+                        <div className="p-4 rounded-xl bg-[#050814] border border-cyan-950/80 text-slate-200 leading-relaxed">
+                          <p>{currentLesson.content || `In this module, we dissect foundational engineering principles for ${currentLesson.title}. Balance computational capability with low power constraints.`}</p>
+                        </div>
 
-                    <p>
-                      When constructing circuits for this module, ensure clean common ground connections across all modules to avoid telemetry ground loops.
-                    </p>
-                  </div>
+                        {/* Interactive Code Snippet if present */}
+                        {currentLesson.codeSnippet && (
+                          <div className="rounded-xl bg-[#030611] border border-cyan-500/30 overflow-hidden shadow-inner">
+                            <div className="flex items-center justify-between px-3 py-2 bg-[#060a1d] border-b border-slate-800 text-xs font-mono text-cyan-400">
+                              <span className="flex items-center gap-1.5 uppercase font-semibold text-[11px]">
+                                <Code className="w-3.5 h-3.5" />
+                                {currentLesson.codeLanguage || 'Firmware Code'} Snippet
+                              </span>
+                              <button
+                                onClick={() => {
+                                  if (currentLesson.codeSnippet) {
+                                    navigator.clipboard.writeText(currentLesson.codeSnippet);
+                                    setCopiedSnippet(true);
+                                    setTimeout(() => setCopiedSnippet(false), 2000);
+                                  }
+                                }}
+                                className="flex items-center gap-1 text-[11px] hover:text-white px-2 py-0.5 rounded bg-slate-900 border border-slate-700 transition-colors"
+                              >
+                                {copiedSnippet ? (
+                                  <>
+                                    <Check className="w-3 h-3 text-emerald-400" />
+                                    <span className="text-emerald-400">Copied!</span>
+                                  </>
+                                ) : (
+                                  <>
+                                    <Copy className="w-3 h-3" />
+                                    <span>Copy Code</span>
+                                  </>
+                                )}
+                              </button>
+                            </div>
+                            <pre className="p-3.5 text-xs font-mono text-cyan-300 overflow-x-auto leading-relaxed">
+                              <code>{currentLesson.codeSnippet}</code>
+                            </pre>
+                          </div>
+                        )}
+
+                        {/* Core Engineering Takeaways */}
+                        <div className="p-4 rounded-xl bg-[#050814] border border-slate-800 space-y-2">
+                          <h4 className="text-xs font-mono uppercase text-amber-400 font-semibold flex items-center gap-1.5">
+                            <Sparkles className="w-3.5 h-3.5" />
+                            Core Engineering Takeaways
+                          </h4>
+                          <ul className="space-y-1.5 text-slate-300 text-xs">
+                            {(currentLesson.takeaways && currentLesson.takeaways.length > 0 ? currentLesson.takeaways : [
+                              'Always calculate maximum current draw before connecting inductive loads.',
+                              'Implement hardware pull-up or pull-down resistors to prevent floating GPIO pin states.',
+                              'Structure sensor telemetry into compact packets to minimize edge radio transmission energy.'
+                            ]).map((takeaway, tIdx) => (
+                              <li key={tIdx} className="flex items-start gap-2">
+                                <span className="text-cyan-400 mt-0.5">✓</span>
+                                <span>{takeaway}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        {/* Practical Hands-on Engineering Challenge */}
+                        {currentLesson.challenge && (
+                          <div className="p-4 rounded-xl bg-gradient-to-r from-amber-950/20 to-slate-900 border border-amber-500/30 space-y-2">
+                            <div className="flex items-center justify-between">
+                              <h4 className="text-xs font-mono uppercase text-amber-300 font-semibold flex items-center gap-1.5">
+                                <CheckSquare className="w-3.5 h-3.5 text-amber-400" />
+                                Practical Lab Challenge
+                              </h4>
+                              <button
+                                onClick={() => {
+                                  setCompletedChallenges(prev => 
+                                    prev.includes(currentLesson.id) 
+                                      ? prev.filter(id => id !== currentLesson.id)
+                                      : [...prev, currentLesson.id]
+                                  );
+                                }}
+                                className={`text-[11px] font-mono px-2.5 py-1 rounded-lg border transition-all ${
+                                  isChallengeCompleted
+                                    ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300'
+                                    : 'bg-slate-900 border-amber-500/30 text-amber-300 hover:bg-amber-500/20'
+                                }`}
+                              >
+                                {isChallengeCompleted ? '✓ Challenge Completed' : 'Mark Challenge Done'}
+                              </button>
+                            </div>
+                            <p className="text-xs text-slate-300 font-mono">
+                              {currentLesson.challenge}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })()}
 
                   {/* Navigation Buttons */}
                   <div className="pt-4 border-t border-slate-800 flex items-center justify-between">

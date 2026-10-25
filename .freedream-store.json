@@ -1,0 +1,384 @@
+{
+  "users": [
+    {
+      "id": "usr-owner-1792939510340",
+      "name": "Owner Engineer",
+      "email": "owner@freedream.tech",
+      "handle": "@freedream.owner",
+      "role": "owner",
+      "avatar": "👑",
+      "location": "Global Headquarters",
+      "passwordHash": "8cfe64f81a97202ad4832d720c16bb1f809489b7dc08384ea75df9c8a38690af8edf02e078669c05af26a8c3340b3bfeab0748f184ec08da4339504606677070",
+      "salt": "f137116a67e1ef7e133d9b86a5068007",
+      "recoveryHash": "1e47f4115531bdd8c923f416d24371f8:4085ff9edb39e6da76180cae4eb08b2e09ddfaa63885a068f609f4187feab056b778d8d58c22bfb680947356a456e71340eb83012132fdafef52aac4e525e76d",
+      "status": "active",
+      "createdAt": "2026-10-25T14:45:10.340Z",
+      "lastLoginAt": "2026-10-25T14:46:26.073Z"
+    }
+  ],
+  "news": [
+    {
+      "title": "Secret Upcoming Quantum Processor Blueprint",
+      "source": "FREEDREAM R&D",
+      "category": "Science and Innovation",
+      "date": "2026-10-26",
+      "readTime": "3 min read",
+      "imageUrl": "https://images.unsplash.com/photo-1518770660439-4636190af475",
+      "summary": "Confidential research notes on upcoming sub-nanometer architecture.",
+      "fullText": "Here is the full confidential text written by the owner.",
+      "url": "https://freedream.tech",
+      "featured": false,
+      "isPublished": true,
+      "authorEmail": "owner@freedream.tech",
+      "id": "news-1792939510353",
+      "createdAt": "2026-10-25T14:45:10.353Z",
+      "updatedAt": "2026-10-25T14:45:10.361Z",
+      "status": "published"
+    },
+    {
+      "title": "FREEDREAM Deploys Autonomous Edge-AI Solar Sentinel V3 in Nigeria",
+      "source": "FREEDREAM Labs & NASRDA",
+      "category": "Nigerian & African Tech",
+      "date": "2026-10-25",
+      "readTime": "3 min read",
+      "imageUrl": "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop",
+      "summary": "FREEDREAM Technologies field-tests its latest edge-classification hardware running on custom RISC-V silicon with solar telemetry.",
+      "url": "https://freedream.tech",
+      "featured": true,
+      "isPublished": true,
+      "authorEmail": "owner@freedream.tech",
+      "id": "news-1792929492408",
+      "createdAt": "2026-10-25T11:58:12.408Z",
+      "updatedAt": "2026-10-25T11:58:12.408Z"
+    },
+    {
+      "id": "news-1",
+      "title": "James Webb Space Telescope Identifies Atmospheric Water & Methane in Exo-System K2-18b",
+      "source": "NASA & Astrophysical Journal",
+      "category": "Space & Astronomy",
+      "date": "2026-10-21",
+      "readTime": "4 min read",
+      "imageUrl": "https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=800&auto=format&fit=crop",
+      "summary": "Spectroscopic observations confirm organic carbon-bearing molecules in the habitable zone of star K2-18, marking a monumental step in interstellar biosignature mapping.",
+      "url": "https://nasa.gov",
+      "featured": true,
+      "isPublished": true,
+      "authorEmail": "owner@freedream.tech",
+      "createdAt": "2026-10-21T10:00:00Z",
+      "updatedAt": "2026-10-21T10:00:00Z"
+    },
+    {
+      "id": "news-2",
+      "title": "Lagos Tech Hub Unveils West Africa’s First Sub-3nm Silicon Design Lab for Edge Robotics",
+      "source": "Techpoint Africa",
+      "category": "Nigerian & African Tech",
+      "date": "2026-10-20",
+      "readTime": "3 min read",
+      "imageUrl": "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=800&auto=format&fit=crop",
+      "summary": "Nigerian chip engineers and universities partner with pan-African tech consortia to fabricate open-RISC-V architecture chips optimized for solar grid sensors and drone flight controllers.",
+      "url": "https://techpoint.africa",
+      "featured": true,
+      "isPublished": true,
+      "authorEmail": "owner@freedream.tech",
+      "createdAt": "2026-10-20T12:00:00Z",
+      "updatedAt": "2026-10-20T12:00:00Z"
+    },
+    {
+      "id": "news-3",
+      "title": "DeepMind & MIT Announce Quantum-Assisted Catalyst for Room-Temperature Green Hydrogen",
+      "source": "Nature Chemistry",
+      "category": "Scientific Breakthroughs",
+      "date": "2026-10-18",
+      "readTime": "5 min read",
+      "imageUrl": "https://images.unsplash.com/photo-1507413245164-6160d8298b31?q=80&w=800&auto=format&fit=crop",
+      "summary": "AI neural networks modeled millions of molecular crystal lattices in 48 hours to discover a nickel-iron alloy capable of splitting seawater without corrosion.",
+      "url": "https://nature.com",
+      "featured": false,
+      "isPublished": true,
+      "authorEmail": "owner@freedream.tech",
+      "createdAt": "2026-10-18T09:30:00Z",
+      "updatedAt": "2026-10-18T09:30:00Z"
+    },
+    {
+      "id": "news-4",
+      "title": "Next-Generation Autonomous Quadruped Robots Deployed in Disaster Recovery Drills",
+      "source": "IEEE Spectrum",
+      "category": "Robotics & AI",
+      "date": "2026-10-15",
+      "readTime": "3 min read",
+      "imageUrl": "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=800&auto=format&fit=crop",
+      "summary": "Equipped with real-time LIDAR SLAM and multimodal vision-language models, the new generation of robotic searchers can parse human audio requests and navigate subterranean tunnels.",
+      "url": "https://spectrum.ieee.org",
+      "featured": false,
+      "isPublished": true,
+      "authorEmail": "owner@freedream.tech",
+      "createdAt": "2026-10-15T14:15:00Z",
+      "updatedAt": "2026-10-15T14:15:00Z"
+    },
+    {
+      "id": "news-5",
+      "title": "African Space Agencies Collaborate on Pan-African Weather Satellite Constellation (AfriSat-1)",
+      "source": "Space in Africa",
+      "category": "Space & Astronomy",
+      "date": "2026-10-12",
+      "readTime": "4 min read",
+      "imageUrl": "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?q=80&w=800&auto=format&fit=crop",
+      "summary": "Nigeria’s NASRDA, South Africa’s SANSA, and Egypt’s EgSA initiate joint telemetry tests for low-earth orbit satellites forecasting monsoons and desert locust migrations.",
+      "url": "https://spaceinafrica.com",
+      "featured": false,
+      "isPublished": true,
+      "authorEmail": "owner@freedream.tech",
+      "createdAt": "2026-10-12T11:00:00Z",
+      "updatedAt": "2026-10-12T11:00:00Z"
+    },
+    {
+      "id": "news-6",
+      "title": "Transformers 4.0: Zero-Shot Multi-Modal Synthesis Redefines Scientific Discovery",
+      "source": "MIT Technology Review",
+      "category": "Artificial Intelligence",
+      "date": "2026-10-09",
+      "readTime": "4 min read",
+      "imageUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop",
+      "summary": "Researchers demonstrate that combining symbolic theorem solvers with generative foundation models enables automated peer-review discovery of mathematical lemmas.",
+      "url": "https://technologyreview.com",
+      "featured": false,
+      "isPublished": true,
+      "authorEmail": "owner@freedream.tech",
+      "createdAt": "2026-10-09T08:00:00Z",
+      "updatedAt": "2026-10-09T08:00:00Z"
+    }
+  ],
+  "categories": [
+    "Global Technology",
+    "Nigerian Technology",
+    "Artificial Intelligence",
+    "Space and Astronomy",
+    "Science and Innovation",
+    "Robotics and Electronics",
+    "Biotechnology & Health"
+  ],
+  "features": {
+    "maintenanceMode": false,
+    "maintenanceMessage": "FREEDREAM TECHNOLOGIES is performing scheduled system optimizations. We will be back online shortly with enhanced telemetry.",
+    "welcomeHeadline": "Welcome to FREEDREAM TECHNOLOGIES • DREAM WITHOUT LIMIT",
+    "welcomeSubmessage": "African Deep-Tech & Global Innovation Matrix. Explore NovaLab, AI Assist, and Academy.",
+    "aiAssistantEnabled": true,
+    "novaLabEnabled": true,
+    "communityHubSubmissions": true,
+    "academyQuizzes": true,
+    "featuredNewsBanner": true,
+    "spaceUpdatesSection": true,
+    "africanTechSpotlight": true,
+    "lastUpdatedBy": "owner@freedream.tech",
+    "lastUpdatedAt": "2026-10-25T11:58:21.427Z"
+  },
+  "announcements": [
+    {
+      "id": "ann-1",
+      "title": "FREEDREAM Neural Matrix 2.5 Deployed",
+      "message": "Upgraded sub-second reasoning engine with Gemini 3.1 Flash-Lite integration for high-speed hardware schematics and code generation.",
+      "category": "Update",
+      "active": true,
+      "createdAt": "2026-10-22T08:00:00Z",
+      "authorEmail": "system"
+    },
+    {
+      "id": "ann-2",
+      "title": "FREEDREAM Innovation Hub Commons Launched",
+      "message": "Be among the first to share your invention, explore ideas, and help build the future of technology.",
+      "category": "Feature",
+      "active": true,
+      "createdAt": "2026-10-25T07:00:00Z",
+      "authorEmail": "system"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "log-init",
+      "timestamp": "2026-10-25T11:57:41.553Z",
+      "action": "SYSTEM_BOOT",
+      "actorEmail": "system",
+      "actorRole": "system",
+      "details": "FREEDREAM OWNER CONTROL CENTER Security Subsystem Initialized"
+    },
+    {
+      "action": "OWNER_ACCOUNT_SETUP",
+      "actorEmail": "owner@freedream.tech",
+      "actorRole": "owner",
+      "details": "Primary Application Owner initialized: owner@freedream.tech",
+      "ipAddress": "::ffff:127.0.0.1",
+      "id": "log-1792929472248-e80z",
+      "timestamp": "2026-10-25T11:57:52.248Z"
+    },
+    {
+      "action": "AUTH_LOGIN_SUCCESS",
+      "actorEmail": "owner@freedream.tech",
+      "actorRole": "owner",
+      "details": "Successful login to Control Center as owner",
+      "ipAddress": "::ffff:127.0.0.1",
+      "id": "log-1792929482179-vf8b",
+      "timestamp": "2026-10-25T11:58:02.179Z"
+    },
+    {
+      "action": "AUTH_LOGIN_SUCCESS",
+      "actorEmail": "owner@freedream.tech",
+      "actorRole": "owner",
+      "details": "Successful login to Control Center as owner",
+      "ipAddress": "::ffff:127.0.0.1",
+      "id": "log-1792929486234-s9yu",
+      "timestamp": "2026-10-25T11:58:06.234Z"
+    },
+    {
+      "action": "AUTH_LOGIN_SUCCESS",
+      "actorEmail": "owner@freedream.tech",
+      "actorRole": "owner",
+      "details": "Successful login to Control Center as owner",
+      "ipAddress": "::ffff:127.0.0.1",
+      "id": "log-1792929492388-zhak",
+      "timestamp": "2026-10-25T11:58:12.388Z"
+    },
+    {
+      "action": "NEWS_CREATED",
+      "actorEmail": "owner@freedream.tech",
+      "actorRole": "owner",
+      "target": "news-1792929492408",
+      "details": "Created article: \"FREEDREAM Deploys Autonomous Edge-AI Solar Sentinel V3 in Ni...\" [Published: true]",
+      "id": "log-1792929492408-ci1e",
+      "timestamp": "2026-10-25T11:58:12.408Z"
+    },
+    {
+      "action": "AUTH_LOGIN_SUCCESS",
+      "actorEmail": "owner@freedream.tech",
+      "actorRole": "owner",
+      "details": "Successful login to Control Center as owner",
+      "ipAddress": "::ffff:127.0.0.1",
+      "id": "log-1792929501406-ulaw",
+      "timestamp": "2026-10-25T11:58:21.406Z"
+    },
+    {
+      "action": "FEATURE_SETTINGS_UPDATED",
+      "actorEmail": "owner@freedream.tech",
+      "actorRole": "owner",
+      "details": "Updated feature flags: maintenanceMode, welcomeHeadline",
+      "id": "log-1792929501427-wgri",
+      "timestamp": "2026-10-25T11:58:21.427Z"
+    },
+    {
+      "action": "AUTH_LOGIN_SUCCESS",
+      "actorEmail": "owner@freedream.tech",
+      "actorRole": "owner",
+      "details": "Successful login to Control Center as owner",
+      "ipAddress": "::ffff:127.0.0.1",
+      "id": "log-1792929505779-nt38",
+      "timestamp": "2026-10-25T11:58:25.779Z"
+    },
+    {
+      "action": "OWNER_ACCOUNT_SETUP",
+      "actorEmail": "owner@freedream.tech",
+      "actorRole": "owner",
+      "details": "Primary Application Owner initialized: owner@freedream.tech",
+      "ipAddress": "::ffff:127.0.0.1",
+      "id": "log-1792939510341-s1bm",
+      "timestamp": "2026-10-25T14:45:10.341Z"
+    },
+    {
+      "action": "NEWS_CREATED",
+      "actorEmail": "owner@freedream.tech",
+      "actorRole": "owner",
+      "target": "news-1792939510353",
+      "details": "Created article: \"Secret Upcoming Quantum Processor Blueprint...\" [Published: false]",
+      "id": "log-1792939510353-f8fd",
+      "timestamp": "2026-10-25T14:45:10.353Z"
+    },
+    {
+      "action": "NEWS_UPDATED",
+      "actorEmail": "owner@freedream.tech",
+      "actorRole": "owner",
+      "target": "news-1792939510353",
+      "details": "Updated article: \"Secret Upcoming Quantum Processor Blueprint...\"",
+      "id": "log-1792939510361-v489",
+      "timestamp": "2026-10-25T14:45:10.361Z"
+    },
+    {
+      "action": "NEWS_CATEGORY_ADDED",
+      "actorEmail": "owner@freedream.tech",
+      "actorRole": "owner",
+      "details": "Added news category: \"Biotechnology & Health\"",
+      "id": "log-1792939510368-lx2q",
+      "timestamp": "2026-10-25T14:45:10.368Z"
+    },
+    {
+      "action": "AUTH_LOGIN_SUCCESS",
+      "actorEmail": "owner@freedream.tech",
+      "actorRole": "owner",
+      "details": "Successful login to Control Center as owner",
+      "ipAddress": "::ffff:127.0.0.1",
+      "id": "log-1792939555887-gru6",
+      "timestamp": "2026-10-25T14:45:55.887Z"
+    },
+    {
+      "action": "NEWS_CATEGORY_ADDED",
+      "actorEmail": "owner@freedream.tech",
+      "actorRole": "owner",
+      "details": "Added news category: \"Quantum Optics\"",
+      "id": "log-1792939555899-h28c",
+      "timestamp": "2026-10-25T14:45:55.899Z"
+    },
+    {
+      "action": "AUTH_LOGIN_SUCCESS",
+      "actorEmail": "owner@freedream.tech",
+      "actorRole": "owner",
+      "details": "Successful login to Control Center as owner",
+      "ipAddress": "::ffff:127.0.0.1",
+      "id": "log-1792939586074-19kt",
+      "timestamp": "2026-10-25T14:46:26.074Z"
+    },
+    {
+      "action": "NEWS_CATEGORY_RENAMED",
+      "actorEmail": "owner@freedream.tech",
+      "actorRole": "owner",
+      "details": "Renamed news category from \"Quantum Optics\" to \"Quantum Photonics\" (0 articles updated)",
+      "id": "log-1792939586102-bzfs",
+      "timestamp": "2026-10-25T14:46:26.102Z"
+    },
+    {
+      "action": "NEWS_CATEGORY_DELETED",
+      "actorEmail": "owner@freedream.tech",
+      "actorRole": "owner",
+      "details": "Deleted news category: \"Quantum Photonics\" (0 articles migrated to \"Global Technology\")",
+      "id": "log-1792939586106-ax45",
+      "timestamp": "2026-10-25T14:46:26.106Z"
+    }
+  ],
+  "feedbackReports": [
+    {
+      "id": "rep-1",
+      "userId": "usr-amina",
+      "userName": "Amina Bello",
+      "category": "Hardware Schematics",
+      "message": "Requested high-torque servo wiring diagram for EMG prosthetics in Academy.",
+      "createdAt": "2026-10-23T11:20:00Z",
+      "status": "open"
+    }
+  ],
+  "sessionTokens": {
+    "fd_061772a8b20c92ff9de758d3a04fa8ba1731d1b6802bbf382c88b44d4097f9cd": {
+      "userId": "usr-owner-1792939510340",
+      "role": "owner",
+      "email": "owner@freedream.tech",
+      "expiresAt": 1793544310340
+    },
+    "fd_3594b0b17cd376d0005cafb83fa4afdae740caa27d938211ae8944cec0309cdf": {
+      "userId": "usr-owner-1792939510340",
+      "role": "owner",
+      "email": "owner@freedream.tech",
+      "expiresAt": 1793544355887
+    },
+    "fd_758892f287e65de9d272ff1f2a044e4302c4d6ed57d015b5cb233553cf4e84b1": {
+      "userId": "usr-owner-1792939510340",
+      "role": "owner",
+      "email": "owner@freedream.tech",
+      "expiresAt": 1793544386073
+    }
+  }
+}

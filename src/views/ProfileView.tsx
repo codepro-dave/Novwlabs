@@ -29,6 +29,7 @@ interface ProfileViewProps {
   onRemoveBookmark: (articleId: string) => void;
   onRemoveIdea: (idea: string) => void;
   onOpenPublishModal: () => void;
+  onNavigateToOwner?: () => void;
 }
 
 export const ProfileView: React.FC<ProfileViewProps> = ({
@@ -39,7 +40,8 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
   onRemoveProject,
   onRemoveBookmark,
   onRemoveIdea,
-  onOpenPublishModal
+  onOpenPublishModal,
+  onNavigateToOwner
 }) => {
   const [activeTab, setActiveTab] = useState<'overview' | 'saved' | 'settings'>('overview');
   const [isEditing, setIsEditing] = useState(false);
@@ -502,11 +504,36 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
               </button>
             </div>
 
+            {/* FREEDREAM Owner Control Center Access */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 rounded-xl bg-gradient-to-r from-[#171207] via-[#0f172a] to-[#050814] border-2 border-amber-500/50 gap-3 shadow-lg">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-base">👑</span>
+                  <h4 className="text-sm font-bold text-amber-300 font-display">FREEDREAM Owner Control Center</h4>
+                  <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-mono border border-amber-500/30">
+                    Restricted Suite
+                  </span>
+                </div>
+                <p className="text-xs text-slate-300 mt-0.5">
+                  Private executive suite: news management, system-wide feature flags, maintenance mode, broadcasts, and security audit logs.
+                </p>
+              </div>
+
+              {onNavigateToOwner && (
+                <button
+                  onClick={onNavigateToOwner}
+                  className="px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-cyan-500 hover:from-amber-400 hover:to-cyan-400 text-black font-extrabold text-xs font-mono flex items-center gap-1.5 shrink-0 shadow-md transition-all cursor-pointer"
+                >
+                  <span>👑 Launch Owner Suite</span>
+                </button>
+              )}
+            </div>
+
             {/* Neural Engine Status */}
             <div className="flex items-center justify-between p-4 rounded-xl bg-[#050814] border border-slate-800">
               <div>
                 <h4 className="text-sm font-semibold text-white">FREEDREAM Neural Backend</h4>
-                <p className="text-xs text-slate-400">Powered by Gemini 3.8 Flash via secure server-side SDK.</p>
+                <p className="text-xs text-slate-400">Powered by Gemini 3.1 Flash-Lite with resilient failover.</p>
               </div>
 
               <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-300 text-xs font-mono">

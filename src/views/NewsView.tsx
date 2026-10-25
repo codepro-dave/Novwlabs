@@ -29,21 +29,36 @@ export const NewsView: React.FC<NewsViewProps> = ({
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeArticle, setActiveArticle] = useState<NewsArticle | null>(null);
-
-  const categories = [
+  const [categories, setCategories] = useState<string[]>([
     'All',
-    'Nigerian & African Tech',
+    'Global Technology',
+    'Nigerian Technology',
     'Artificial Intelligence',
-    'Space & Astronomy',
-    'Scientific Breakthroughs',
-    'Robotics & AI'
-  ];
+    'Space and Astronomy',
+    'Science and Innovation',
+    'Robotics and Electronics'
+  ]);
+
+  // Fetch dynamic owner-managed categories
+  React.useEffect(() => {
+    fetch('/api/news/categories')
+      .then(res => res.json())
+      .then(data => {
+        if (data.categories && Array.isArray(data.categories)) {
+          setCategories(['All', ...data.categories]);
+        }
+      })
+      .catch(() => {
+        // Fallback to default
+      });
+  }, []);
 
   const filteredArticles = articles.filter(article => {
-    const matchesCategory = selectedCategory === 'All' || article.category.toLowerCase().includes(selectedCategory.toLowerCase());
+    const matchesCategory = selectedCategory === 'All' || article.category.toLowerCase().trim() === selectedCategory.toLowerCase().trim();
     const matchesSearch = searchQuery.trim() === '' || 
       article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       article.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (article.fullText && article.fullText.toLowerCase().includes(searchQuery.toLowerCase())) ||
       article.source.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
@@ -53,24 +68,27 @@ export const NewsView: React.FC<NewsViewProps> = ({
       {/* News Hero Header */}
       <div className="rounded-3xl bg-gradient-to-r from-[#0c1538] via-[#090e29] to-[#050814] border border-cyan-500/30 p-6 glow-card">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="space-y-1 max-w-2xl">
+          <div className="space-y-1.5 max-w-2xl">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping" />
               <span className="text-xs font-mono text-cyan-400 uppercase tracking-wider font-semibold">
                 GLOBAL & AFRICAN DEEP-TECH TELEMETRY FEED
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold font-display text-white">
-              FREEDREAM <span className="text-amber-400">NEWS WIRE</span>
+            <h1 className="text-2xl sm:text-3xl font-extrabold font-display text-white tracking-tight">
+              FREEDREAM <span className="text-amber-400">NEWS</span>
             </h1>
+            <p className="text-amber-400 font-mono text-xs sm:text-sm tracking-wide font-medium">
+              "Your World. Your Technology. Your Future."
+            </p>
             <p className="text-xs sm:text-sm text-slate-300">
-              Verified scientific breakthroughs, Nigerian hardware engineering milestones, artificial intelligence developments, and astrophysics discoveries from credible research institutions.
+              Verified technological breakthroughs, African hardware engineering milestones, artificial intelligence developments, and scientific discoveries.
             </p>
           </div>
 
           <div className="flex items-center gap-2 bg-[#050814] p-3 rounded-2xl border border-slate-800 shrink-0 text-xs font-mono">
             <ShieldCheck className="w-4 h-4 text-emerald-400" />
-            <span className="text-slate-300">Curated & Verified Sources</span>
+            <span className="text-slate-300">Owner Verified Publications</span>
           </div>
         </div>
 
@@ -92,7 +110,7 @@ export const NewsView: React.FC<NewsViewProps> = ({
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-3 py-1.5 rounded-xl font-mono transition-all shrink-0 ${
+                className={`px-3 py-1.5 rounded-xl font-mono transition-all shrink-0 cursor-pointer ${
                   selectedCategory === cat
                     ? 'bg-cyan-500 text-black font-semibold shadow-sm'
                     : 'bg-slate-900/80 hover:bg-slate-800 text-slate-300 border border-slate-800'
@@ -219,9 +237,9 @@ export const NewsView: React.FC<NewsViewProps> = ({
 
                   <button
                     onClick={() => setActiveArticle(article)}
-                    className="px-2.5 py-1 rounded-lg bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[11px] font-mono"
+                    className="px-3 py-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[11px] font-mono cursor-pointer transition-colors"
                   >
-                    Read
+                    Read Full Story
                   </button>
                 </div>
               </div>
@@ -230,89 +248,157 @@ export const NewsView: React.FC<NewsViewProps> = ({
         })}
 
         {filteredArticles.length === 0 && (
-          <div className="col-span-full py-12 text-center text-slate-400 text-xs font-mono bg-[#090e29]/40 rounded-2xl border border-dashed border-slate-800">
-            No news dispatches matched your query. Try searching for "Lagos", "AI", "Webb", or "Sensors".
+          <div className="col-span-full py-16 text-center text-slate-400 text-xs font-mono bg-[#090e29]/40 rounded-3xl border border-dashed border-slate-800 space-y-2">
+            <Newspaper className="w-8 h-8 text-slate-600 mx-auto" />
+            <p className="text-sm font-semibold text-white">No published news articles in this section.</p>
+            <p className="text-slate-400">Check back soon or try selecting a different category tab.</p>
           </div>
         )}
       </div>
 
-      {/* Article Detail Reading Modal */}
+      {/* Article Detail Reading Page / Modal */}
       {activeArticle && (
-        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="relative w-full max-w-2xl max-h-[90vh] bg-[#090e29] border border-cyan-500/40 rounded-3xl p-6 space-y-5 overflow-y-auto glow-card">
-            <div className="flex items-start justify-between border-b border-slate-800 pb-4">
-              <div>
-                <div className="flex items-center gap-2 text-xs font-mono text-cyan-400">
-                  <span className="px-2.5 py-0.5 rounded-full bg-cyan-950 border border-cyan-800">
+        <div className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+          <div className="relative w-full max-w-3xl max-h-[92vh] bg-[#090e29] border border-cyan-500/40 rounded-3xl p-5 sm:p-8 space-y-5 overflow-y-auto glow-card">
+            {/* Header info & Back button */}
+            <div className="flex items-start justify-between border-b border-slate-800 pb-4 gap-3">
+              <div className="space-y-1.5">
+                <div className="flex flex-wrap items-center gap-2 text-xs font-mono text-cyan-400">
+                  <span className="px-2.5 py-0.5 rounded-full bg-cyan-950 text-cyan-300 border border-cyan-800">
                     {activeArticle.category}
                   </span>
                   <span>•</span>
-                  <span>{activeArticle.source}</span>
+                  <span className="text-slate-300 font-semibold">{activeArticle.source}</span>
+                  {activeArticle.featured && (
+                    <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px]">
+                      🌟 Featured
+                    </span>
+                  )}
                 </div>
-                <h2 className="text-xl sm:text-2xl font-bold font-display text-white mt-2">
+                <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold font-display text-white leading-tight">
                   {activeArticle.title}
                 </h2>
               </div>
 
               <button
                 onClick={() => setActiveArticle(null)}
-                className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white shrink-0 ml-3"
+                className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white shrink-0 cursor-pointer transition-colors"
+                title="Back to FREEDREAM NEWS"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <div className="h-64 rounded-2xl overflow-hidden bg-slate-900 border border-slate-800">
-              <img
-                src={activeArticle.imageUrl}
-                alt={activeArticle.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
+            {/* Article Image when available */}
+            {activeArticle.imageUrl && (
+              <div className="h-64 sm:h-80 w-full rounded-2xl overflow-hidden bg-slate-900 border border-slate-800">
+                <img
+                  src={activeArticle.imageUrl}
+                  alt={activeArticle.title}
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    (e.target as any).style.display = 'none';
+                  }}
+                />
+              </div>
+            )}
 
-            <div className="flex items-center justify-between text-xs font-mono text-slate-400 pb-2 border-b border-slate-800/80">
-              <span>Published: {activeArticle.date}</span>
-              <span>Reading: {activeArticle.readTime}</span>
-              <span className="text-emerald-400 flex items-center gap-1">
-                <ShieldCheck className="w-3.5 h-3.5" /> Peer Verified
-              </span>
-            </div>
+            {/* Meta bar */}
+            <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-mono text-slate-400 py-2 border-y border-slate-800/80">
+              <div className="flex items-center gap-4">
+                <span className="flex items-center gap-1.5 text-slate-300">
+                  <Calendar className="w-3.5 h-3.5 text-cyan-400" />
+                  {activeArticle.date}
+                </span>
+                <span className="flex items-center gap-1.5 text-slate-300">
+                  <Clock className="w-3.5 h-3.5 text-amber-400" />
+                  {activeArticle.readTime}
+                </span>
+              </div>
 
-            <div className="space-y-4 text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">
-              <p className="text-sm sm:text-base font-medium text-cyan-100">
-                {activeArticle.summary}
-              </p>
+              <div className="flex items-center gap-2">
+                {/* Native Share Button */}
+                <button
+                  onClick={async () => {
+                    if (navigator.share) {
+                      try {
+                        await navigator.share({
+                          title: activeArticle.title,
+                          text: activeArticle.summary,
+                          url: window.location.href,
+                        });
+                      } catch (e) {
+                        // user cancelled
+                      }
+                    } else {
+                      navigator.clipboard.writeText(`${activeArticle.title} - ${window.location.href}`);
+                      alert('Article headline and link copied to clipboard!');
+                    }
+                  }}
+                  className="px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white border border-slate-800 text-xs font-mono flex items-center gap-1.5 cursor-pointer transition-colors"
+                >
+                  <Share2 className="w-3.5 h-3.5 text-cyan-400" />
+                  <span>Share</span>
+                </button>
 
-              <p>
-                Researchers and engineers reporting from {activeArticle.source} emphasize that this breakthrough unlocks new avenues for rapid commercial and educational adoption. By leveraging open architecture standards and decentralized telemetry networks, innovators can implement these findings into actionable prototypes.
-              </p>
-
-              <div className="p-4 rounded-xl bg-[#050814] border border-slate-800 space-y-2">
-                <h4 className="text-xs font-mono text-amber-400 uppercase font-semibold">
-                  Why This Matters for FREEDREAM Innovators:
-                </h4>
-                <p className="text-xs text-slate-300">
-                  Deep-tech breakthroughs thrive when accessible to builders on the ground. You can incorporate the core findings of this research directly into your hardware projects in NovaLab.
-                </p>
+                {/* Bookmark Button */}
+                <button
+                  onClick={() => onBookmarkArticle(activeArticle.id)}
+                  className={`px-3 py-1.5 rounded-xl border text-xs font-mono flex items-center gap-1.5 cursor-pointer transition-all ${
+                    userProfile.savedArticles.includes(activeArticle.id)
+                      ? 'bg-amber-500/20 border-amber-500 text-amber-300'
+                      : 'bg-slate-900 border-slate-800 text-slate-300 hover:text-white'
+                  }`}
+                >
+                  <Bookmark className="w-3.5 h-3.5" />
+                  <span>{userProfile.savedArticles.includes(activeArticle.id) ? 'Bookmarked' : 'Save'}</span>
+                </button>
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-4 border-t border-slate-800">
-              <button
-                onClick={() => onBookmarkArticle(activeArticle.id)}
-                className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-700 text-xs font-mono flex items-center gap-1.5"
-              >
-                <Bookmark className="w-3.5 h-3.5" />
-                <span>
-                  {userProfile.savedArticles.includes(activeArticle.id) ? 'Saved in Profile' : 'Bookmark Story'}
-                </span>
-              </button>
+            {/* Summary Highlight */}
+            {activeArticle.summary && (
+              <div className="p-4 rounded-2xl bg-cyan-950/20 border border-cyan-500/30">
+                <p className="text-xs sm:text-sm font-semibold text-cyan-200 leading-relaxed">
+                  {activeArticle.summary}
+                </p>
+              </div>
+            )}
+
+            {/* Full Article Text */}
+            <div className="space-y-4 text-xs sm:text-sm text-slate-200 leading-relaxed font-sans">
+              {activeArticle.fullText ? (
+                <div className="whitespace-pre-wrap leading-relaxed text-slate-300 space-y-3">
+                  {activeArticle.fullText}
+                </div>
+              ) : (
+                <p className="text-slate-400 italic">
+                  Additional reporting and telemetry for this breakthrough are published directly through the source institution below.
+                </p>
+              )}
+            </div>
+
+            {/* Footer with Source link and Back to News button */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-4 border-t border-slate-800">
+              {activeArticle.url ? (
+                <a
+                  href={activeArticle.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-4 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-cyan-300 border border-cyan-500/30 text-xs font-mono flex items-center justify-center gap-2 cursor-pointer transition-colors"
+                >
+                  <span>Read on {activeArticle.source}</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              ) : (
+                <div />
+              )}
 
               <button
                 onClick={() => setActiveArticle(null)}
-                className="px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-semibold text-xs font-mono"
+                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-cyan-500 hover:from-amber-400 hover:to-cyan-400 text-black font-extrabold text-xs font-mono cursor-pointer shadow-md transition-all flex items-center justify-center gap-1.5"
               >
-                Close Article
+                <span>Back to FREEDREAM NEWS</span>
               </button>
             </div>
           </div>

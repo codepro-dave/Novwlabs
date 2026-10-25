@@ -104,6 +104,20 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span className="hidden sm:inline">Share App</span>
           </button>
 
+          {/* Owner Control Center Quick Access Button */}
+          <button
+            onClick={() => onTabChange('owner')}
+            className={`px-2.5 sm:px-3 py-1.5 rounded-lg font-mono text-xs font-bold flex items-center gap-1.5 transition-all shadow-sm cursor-pointer ${
+              currentTab === 'owner'
+                ? 'bg-gradient-to-r from-amber-500 to-amber-400 text-black border border-amber-300 shadow-amber-950/40'
+                : 'bg-[#140f05] hover:bg-[#201809] border border-amber-500/40 text-amber-400 hover:text-amber-300'
+            }`}
+            title="FREEDREAM Owner Control Center (Restricted Executive Suite)"
+          >
+            <span className="text-xs">👑</span>
+            <span className="hidden sm:inline">Owner Suite</span>
+          </button>
+
           {/* Currency Toggle */}
           <button
             onClick={onToggleCurrency}
@@ -113,10 +127,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span>{userProfile.currency === 'USD' ? '$ USD' : '₦ NGN'}</span>
           </button>
 
-          {/* Phone Frame Simulator Toggle */}
+          {/* Phone Frame Simulator Toggle (Desktop only helper) */}
           <button
             onClick={onTogglePhoneFrame}
-            className="p-2 rounded-lg bg-slate-900/80 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-cyan-300 transition-colors"
+            className="hidden md:flex items-center justify-center p-2 rounded-lg bg-slate-900/80 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-cyan-300 transition-colors"
             title={userProfile.phoneFrameMode ? "Switch to Fullscreen Responsive View" : "Simulate Android Mobile Viewport"}
           >
             {userProfile.phoneFrameMode ? (

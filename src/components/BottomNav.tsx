@@ -27,7 +27,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onTabChange })
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-[#050814]/95 backdrop-blur-lg border-t border-cyan-950/80 px-2 py-1.5 shadow-2xl shadow-cyan-950/90 lg:hidden">
+    <nav className="fixed bottom-0 left-0 right-0 z-40 bg-[#050814]/95 backdrop-blur-lg border-t border-cyan-950/80 px-1 pt-1.5 pb-[calc(0.5rem+env(safe-area-inset-bottom,0px))] shadow-2xl shadow-cyan-950/90 lg:hidden">
       <div className="max-w-md mx-auto grid grid-cols-7 items-center justify-items-center">
         {tabs.map(tab => {
           const isActive = currentTab === tab.id;
@@ -35,7 +35,7 @@ export const BottomNav: React.FC<BottomNavProps> = ({ currentTab, onTabChange })
             <button
               key={tab.id}
               onClick={() => onTabChange(tab.id)}
-              className={`relative flex flex-col items-center justify-center py-1 w-full rounded-xl transition-all ${
+              className={`relative flex flex-col items-center justify-center py-1 w-full min-h-[50px] rounded-xl transition-all ${
                 isActive 
                   ? 'text-cyan-400 font-semibold' 
                   : 'text-slate-400 hover:text-slate-200'
